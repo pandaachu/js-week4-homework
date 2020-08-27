@@ -158,7 +158,7 @@ export default {
       }
 
       //預設帶入 token
-      axios.defaults.headers.common.Authorization = `Bearer ${this.token}`;
+      // axios.defaults.headers.common.Authorization = `Bearer ${this.token}`;
 
       axios[httpMethod](api, this.temProduct).then(() => {
         $('#productModal').modal('hide');
