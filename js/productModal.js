@@ -156,7 +156,6 @@ export default {
     },
 
 
-
     // // 按下 updateProduct() 會更新 temProduct 資料
     // updateProduct() {
     //   let url = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ this.temProduct.id }`
