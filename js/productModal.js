@@ -53,7 +53,7 @@ export default {
                   <input
                     v-model="temProduct.unit"
                     id="unit"
-                    type="number"
+                    type="unit"
                     class="form-control"
                     placeholder="請輸入單位"
                   />
