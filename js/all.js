@@ -73,6 +73,7 @@ var app = new Vue({
       ) {
         case 'new': // 判斷時看參數
           this.temProduct = { imageUrl: [] };
+          this.isNew = true;
           $('#productModal').modal('show');
           break;
         case 'edit':
@@ -87,6 +88,7 @@ var app = new Vue({
             $('#productModal').modal('show');
             this.loadingBtn = ''; // 清除
           })
+          this.isNew = false;
           // 打開 modal 先 copy 這個產品資料到 temProduct
           // 淺拷貝 -> Object.assign({}, 要插入的值)
           //this.temProduct = Object.assign({}, item); // item = edit 傳來的資料
