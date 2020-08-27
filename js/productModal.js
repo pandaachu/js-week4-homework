@@ -131,23 +131,58 @@ export default {
     </div>`,
   data() {
     return {
-      // imageUrl: [],…
+      imageUrl: [],
     };
   },
   // 要把外層的 api 傳進來
-  props: ['temProduct','api'],
+  props: ['isNew','temProduct','api'],
   methods: {
-    // 按下 updateProduct() 會更新 temProduct 資料
-    updateProduct() {
-      let url = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ this.temProduct.id }`
-      axios.patch(url, this.temProduct)
-      .then(res=>{
-        // console.log(res);
-        // 跟外層說把事情做完了，麻煩更新畫面
-        this.$emit('update')
-        })
-      // temProduct 是物件，有傳參考的特性，這裡沒有改到原本的值，所以：
-      // 跟這個："單向數據流 - 使用 Props 接收資料都不能作修改" 不衝突
+    getProduct(id) {
+      const api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${id}`;
+      axios.get(api).then((res) => {
+        $('#productModal').modal('show');
+        this.temProduct = res.data.data;
+      }).catch((error) => {
+        console.log(error);
+      });
     },
+    // 上傳產品資料
+    updateProduct() {
+      // 新增商品
+      let api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product`;
+      let httpMethod = 'post';
+      // 當不是新增商品時則切換成編輯商品 API
+      if (!this.isNew) {
+        api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ this.temProduct.id }`;
+        httpMethod = 'patch';
+      }
+
+      //預設帶入 token
+      axios.defaults.headers.common.Authorization = `Bearer ${this.token}`;
+
+      axios[httpMethod](api, this.temProduct).then(() => {
+        $('#productModal').modal('hide');
+        this.$emit('update');
+      }).catch((error) => {
+        console.log(error)
+      });
+    },
+
+
+
+
+
+    // // 按下 updateProduct() 會更新 temProduct 資料
+    // updateProduct() {
+    //   let url = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ this.temProduct.id }`
+    //   axios.patch(url, this.temProduct)
+    //   .then(res=>{
+    //     // console.log(res);
+    //     // 跟外層說把事情做完了，麻煩更新畫面
+    //     this.$emit('update')
+    //     })
+    //   // temProduct 是物件，有傳參考的特性，這裡沒有改到原本的值，所以：
+    //   // 跟這個："單向數據流 - 使用 Props 接收資料都不能作修改" 不衝突
+    // },
   },
 };
