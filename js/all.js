@@ -29,43 +29,6 @@ var app = new Vue({
     loadingBtn: '',
   },
   methods: {
-    // 方便管理
-    // updateProduct() {
-    //   if(this.temProduct.id){ // 看有沒有 id, 沒有=> 新增產品
-    //     var i;
-    //     this.products.forEach((item, key)=>{
-    //       if(item.id === this.temProduct.id){
-    //         i = key; // 找出當前的 id
-    //       }
-    //     });
-    //   } else { // 新增產品
-    //     //const id = new Data().getTime(); // 取 unix 時間
-    //     const id = (new Date ()).getTime(); // 賦予 id
-    //     this.temProduct.id = id;
-    //     this.products.push(this.temProduct);
-    //   }
-
-    //   console.log(i, this.temProduct);
-    //   // this.$set(目標, 屬性, 值) ;
-    //   this.$set(this.products, i, this.temProduct); 
-    //   this.temProduct = {}; // 兩個又是同一個物件，為了避免傳參考的特質，新增一個空物件
-    //   $('#productModal').modal('hide');
-    // },
-    // deleteProduct(id) {
-    //   // 傳入參數 id
-    //   //console.log(id);
-    //   var i;
-    //   this.products.forEach((item, key) => {
-    //     // 刪除2. 取得 id 後會跟 item.id 作比對，一樣的話會被刪除
-    //     if (item.id === id) {
-    //       // 與傳進來的 id 作比對
-    //       i = key; // 找出當前的 id
-    //     }
-    //   });
-    //   console.log(i);
-    //   this.products.splice(i, 1); // 刪除一筆資料
-    //   $('#delProductModal').modal('hide');
-    // },
     openModal(isNew, item) {
       // 觸發時帶入參數
       switch (
@@ -78,7 +41,7 @@ var app = new Vue({
           break;
         case 'edit':
           this.loadingBtn = item.id;
-          // 列表的資料有缺 description，所以要從新取得單一產品資料
+          // 列表的資料有缺 description，所以要重新取得單一產品資料
           const url = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ item.id }`
           // console.log(item);
           axios.get(url)
@@ -110,7 +73,7 @@ var app = new Vue({
       // console.log(num);
       // console.log(1);
       // API
-      // 為什麼不能寫 apiPath & uuid
+      // 為什麼不能寫 apiPath & uuid  -> 這兩個變數在 app{} 物件裡
       // const api = `${this.api.apiPath}${this.api.uuid}/admin/ec/products`;
       // 帶上分頁：
       const api = `${this.api.apiPath}${this.api.uuid}/admin/ec/products?page=${ num }`;

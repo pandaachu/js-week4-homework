@@ -107,13 +107,12 @@ export default {
               <div class="form-group">
                 <div class="form-check">
                   <input
-                    id="is_enabled"
+                    id="enabled"
                     class="form-check-input"
                     type="checkbox"
-                    :true-value="1"
-                    :false-value="0"
+                    v-model="temProduct.enabled"
                   />
-                  <label class="form-check-label" for="is_enabled">是否啟用</label>
+                  <label class="form-check-label" for="enabled">是否啟用</label>
                 </div>
               </div>
             </div>
@@ -137,38 +136,24 @@ export default {
   // 要把外層的 api 傳進來
   props: ['isNew','temProduct','api'],
   methods: {
-    getProduct(id) {
-      const api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${id}`;
-      axios.get(api).then((res) => {
-        $('#productModal').modal('show');
-        this.temProduct = res.data.data;
-      }).catch((error) => {
-        console.log(error);
-      });
-    },
     // 上傳產品資料
     updateProduct() {
       // 新增商品
+      // this.isNew = true; 要符合此條件
       let api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product`;
-      let httpMethod = 'post';
-      // 當不是新增商品時則切換成編輯商品 API
+      let axiosMethod = 'post';
+      // 如果不是新增產品 -> 編輯產品
       if (!this.isNew) {
         api = `${this.api.apiPath}${this.api.uuid}/admin/ec/product/${ this.temProduct.id }`;
-        httpMethod = 'patch';
+        axiosMethod = 'patch';
       }
-
-      //預設帶入 token
-      // axios.defaults.headers.common.Authorization = `Bearer ${this.token}`;
-
-      axios[httpMethod](api, this.temProduct).then(() => {
+      axios[axiosMethod](api, this.temProduct).then(() => {
         $('#productModal').modal('hide');
         this.$emit('update');
       }).catch((error) => {
         console.log(error)
       });
     },
-
-
 
 
 

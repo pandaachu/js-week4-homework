@@ -48,7 +48,7 @@
               <td>{{ item.origin_price }}</td>
               <td>{{ item.price }}</td>
               <td>
-                <span v-if="item.is_enabled" class="text-success">啟用</span>
+                <span v-if="item.enabled" class="text-success">啟用</span>
                 <span v-else>未啟用</span>
               </td>
               <td>
@@ -97,6 +97,8 @@
         <del-product-modal :api="api" :tem-product="temProduct" @update="getProducts"></del-product-modal>
       </div>
     </div>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
