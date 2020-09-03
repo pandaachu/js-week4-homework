@@ -99,7 +99,7 @@
                 // 儲存 cookie，new Date(expired * 1000)是固定的寫法，時間格式的轉換，path=/ -> 可寫可不寫
                 document.cookie = `hexToken=${token}; expires=${new Date(expired * 1000)}; path=/`;
                 // 登入後轉址
-                window.location = 'product.html';
+                window.location = '/js-week4-homework/product.html';
                 // axios 是非同步行為，因此如果要正確儲存 token，轉址的步驟要放在 axios 裡，否則轉址會比 axios 先進行，結果不會進行 axios 的步驟
               })
               .catch(error => {
