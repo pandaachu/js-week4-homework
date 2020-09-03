@@ -17,6 +17,9 @@ var app = new Vue({
     temProduct: {
       imageUrl: [], // 資料結構
     }, //用來存寫進來的 products 物件
+    status: {
+      fileUploading: false,
+    },
     pagination: {}, // 存放頁碼
     products: [],
     api: {

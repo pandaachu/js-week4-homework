@@ -12,18 +12,21 @@ export default {
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group">
-                <label for="imageUrl">輸入圖片網址</label>
-                <!-- 因為已經在編輯按鈕上綁定按下按鈕打開該產品資料 modal，且把資料存在 temProduct，所以這裡的 v-model 是綁 temProduct.imageUrl, 而不是 product.imageUrl -->
-                <input
-                  v-model="temProduct.imageUrl[0]"
-                  id="imageUrl"
-                  type="text"
-                  class="form-control"
-                  placeholder="請輸入圖片連結"
-                />
+            <!-- 因為已經在編輯按鈕上綁定按下按鈕打開該產品資料 modal，且把資料存在 temProduct，所以這裡的 v-model 是綁 temProduct.imageUrl, 而不是 product.imageUrl -->
+            <div v-for="i in 5" :key="i + 'img'" class="form-group">
+            <label :for="'img' + i">輸入圖片網址</label>
+            <input :id="'img' + i" v-model="temProduct.imageUrl[i - 1]" type="text" class="form-control"
+            placeholder="請輸入圖片連結">
+            </div>
+            <div class="form-group">
+            <!-- 這個方法能適合在新增產吅的時候用 -->
+                <label for="customFile">
+                  或 上傳圖片
+                  <i v-if="status.fileUploading" class="fas fa-spinner fa-spin"></i>
+                </label>
+                <input id="customFile" ref="file" type="file" class="form-control" @change="uploadFile">
               </div>
-              <img :src="temProduct.imageUrl" class="img-fluid" alt />
+              <img :src="temProduct.imageUrl[0]" class="img-fluid" alt />
             </div>
             <div class="col-sm-8">
               <div class="form-group">
@@ -131,10 +134,11 @@ export default {
   data() {
     return {
       imageUrl: [],
+      filePath: '',
     };
   },
   // 要把外層的 api 傳進來
-  props: ['isNew','temProduct','api'],
+  props: ['isNew','temProduct','api','status'],
   methods: {
     // 上傳產品資料
     updateProduct() {
@@ -152,6 +156,46 @@ export default {
         this.$emit('update');
       }).catch((error) => {
         console.log(error)
+      });
+    },
+    uploadFile() {
+
+      // 選取 DOM 中的檔案資訊
+      // 取得 DOM 物件
+      const uploadedfile = document.querySelector('#customFile').files[0]
+      // const uploadedfile = this.$refs.file.files[0];
+      // files 屬性
+      console.dir(uploadedfile)
+
+      // 轉成 Form Data ( 固定寫法 )
+      const formData = new FormData();
+      formData.append('file', uploadedfile); // 加新的欄位 -> 對應 API
+
+      // 路由、驗證
+      const url = `${this.api.apiPath}${this.api.uuid}/admin/storage`;
+
+      // 利用狀態碼製作上傳東西時顯示 loading 圖示的做法，之後可應用在各頁面之讀取
+      this.status.fileUploading = true; 
+
+      // 透過 Ajax 上傳
+      axios.post(url, formData, {
+        headers: { // 聲明這段內容要傳送的時候必需使用 formData 格式
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(response => {
+        console.log(response);
+        // 接到參數後關閉 loading 圖示
+        this.status.fileUploading = false;
+        // 把路徑帶到畫面
+        if (response.status === 200) {
+          this.temProduct.imageUrl.push(response.data.data.path);
+        }
+        // 圖片上傳有大小限制，過度使用會被停權
+      })
+      .catch(() => {
+        console.log('上傳不可超過 2 MB');
+        this.status.fileUploading = false;
       });
     },
 
