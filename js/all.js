@@ -109,7 +109,7 @@ var app = new Vue({
     // 如果無法取得 token 會返回 login 裡畫面
     // 防止直接輸入網址進入畫面
     if (this.token===""){
-      window.location = "/login.html"
+      window.location = "/js-week4-homework/login.html"
     }
 
     // 執行 getProducts()
